@@ -2,6 +2,10 @@
 module Metriks
   VERSION = '0.9.9.8'
 
+  def self.histogram_factory=(f)
+    Metriks::Registry.default.histogram_factory = f
+  end
+
   def self.get(name)
     Metriks::Registry.default.get(name)
   end

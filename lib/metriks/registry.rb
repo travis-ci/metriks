@@ -3,6 +3,7 @@ require 'metriks/timer'
 require 'metriks/utilization_timer'
 require 'metriks/meter'
 require 'metriks/gauge'
+require 'metriks/hdr_histogram'
 
 module Metriks
   # Public: A collection of metrics
@@ -18,6 +19,18 @@ module Metriks
     def initialize
       @mutex = Mutex.new
       @metrics = {}
+      @histogram_factory = lambda {
+        Metriks::Histogram.new_exponentially_decaying
+      }
+    end
+
+    # Public: set factory function that creates a histogram
+    #
+    # histogram_factory=
+    def histogram_factory=(f)
+      @mutex.synchronize do
+        @histogram_factory = f
+      end
     end
 
     # Public: Clear all of the metrics in the Registry. This ensures all
@@ -114,7 +127,9 @@ module Metriks
     #
     # Returns the Metriks::Timer identified by the name.
     def timer(name)
-      add_or_get(name, Metriks::Timer)
+      add_or_get(name, Metriks::Timer) do
+        Metriks::Timer.new(@histogram_factory.call)
+      end
     end
 
     # Public: Fetch or create a new utilization timer metric.
@@ -149,7 +164,7 @@ module Metriks
     # Returns the Metriks::Histogram identified by the name.
     def histogram(name)
       add_or_get(name, Metriks::Histogram) do
-        Metriks::Histogram.new_exponentially_decaying
+        @histogram_factory.call
       end
     end
 

@@ -42,6 +42,7 @@ Gem::Specification.new do |s|
   s.add_dependency('atomic', ["~> 1.0"])
   s.add_dependency('hitimes', [ "~> 1.1"])
   s.add_dependency('avl_tree', [ "~> 1.2.0" ])
+  s.add_dependency('HDRHistogram', [ "~> 0.1.3" ])
 
   ## List your development dependencies here. Development dependencies are
   ## those that are only needed during development
@@ -63,6 +64,8 @@ Gem::Specification.new do |s|
     lib/metriks/ewma.rb
     lib/metriks/exponentially_decaying_sample.rb
     lib/metriks/gauge.rb
+    lib/metriks/hdr_histogram.rb
+    lib/metriks/hdr_histogram_snapshot.rb
     lib/metriks/histogram.rb
     lib/metriks/meter.rb
     lib/metriks/registry.rb
