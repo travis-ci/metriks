@@ -78,7 +78,7 @@ module Metriks::Reporter
           ], [
             :median, :get_95th_percentile
           ]
-        when Metriks::Histogram
+        when Metriks::Histogram, Metriks::HdrHistogram
           prepare_metric name, metric, [
             :count, :min, :max, :mean, :stddev
           ], [
