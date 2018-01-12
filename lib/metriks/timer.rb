@@ -32,6 +32,10 @@ module Metriks
       @histogram.clear
     end
 
+    def flush_histogram
+      @histogram.flush_histogram if @histogram.respond_to?(:flush_histogram)
+    end
+
     def update(duration)
       if duration >= 0
         @meter.mark

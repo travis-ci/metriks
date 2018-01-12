@@ -21,6 +21,10 @@ module Metriks
       @sum = 0.0
     end
 
+    def flush_histogram
+      clear
+    end
+
     def count
       @hdr.count
     end

@@ -92,6 +92,8 @@ module Metriks::Reporter
             :median, :get_95th_percentile
           ]
         end
+
+        metric.flush_histogram if metric.respond_to?(:flush_histogram)
       end
     end
 
