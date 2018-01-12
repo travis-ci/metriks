@@ -21,7 +21,7 @@ module Metriks
       @sum = 0.0
     end
 
-    def size
+    def count
       @hdr.count
     end
 
