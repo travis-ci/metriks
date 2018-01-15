@@ -25,11 +25,13 @@ module Metriks
     def initialize(histogram = Metriks::Histogram.new_exponentially_decaying)
       @meter     = Metriks::Meter.new
       @histogram = histogram
+      @count     = 0
     end
 
     def clear
       @meter.clear
       @histogram.clear
+      @count = 0
     end
 
     def flush_histogram
@@ -40,6 +42,7 @@ module Metriks
       if duration >= 0
         @meter.mark
         @histogram.update(duration)
+        @count += 1
       end
     end
 
@@ -63,7 +66,7 @@ module Metriks
     end
 
     def count
-      @histogram.count
+      @count
     end
 
     def sum
