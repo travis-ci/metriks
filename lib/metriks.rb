@@ -2,8 +2,10 @@
 module Metriks
   VERSION = '0.9.9.8'
 
-  def self.histogram_factory=(f)
-    Metriks::Registry.default.histogram_factory = f
+  def self.enable_hdrhistogram(f)
+    Metriks::Registry.default.histogram_factory = lambda {
+      Metriks::HdrHistogram.new
+    }
   end
 
   def self.get(name)
