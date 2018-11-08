@@ -1,4 +1,6 @@
-require 'test/unit'
+require 'minitest/autorun'
+Test = MiniTest
+
 require 'pp'
 
 require 'mocha'
@@ -17,7 +19,7 @@ module ThreadHelper
   def thread(threads = 2, opts = {})
     n = opts[:n] || 1
     results = []
-   
+
     threads.times.map do |i|
       Thread.new do
         n.times do
@@ -27,7 +29,7 @@ module ThreadHelper
     end.each do |thread|
       thread.join
     end
-    
+
     results
   end
 end
