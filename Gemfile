@@ -1,5 +1,7 @@
 source 'https://rubygems.org'
 
+ruby '2.5.3'
+
 gemspec
 
 gem 'beefcake', '< 1.0.0'
