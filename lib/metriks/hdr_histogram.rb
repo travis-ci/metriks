@@ -30,14 +30,9 @@ module Metriks
     end
 
     def snapshot
-      hdr_dup = ::HDRHistogram.new(
-        @lowest,
-        @highest,
-        @precision_digits,
-        multiplier: 0.001, unit: :ms
+      HdrHistogramSnapshot.new(
+        @hdr.dup.merge!(@hdr)
       )
-      hdr_dup.merge(@hdr)
-      HdrHistogramSnapshot.new(hdr_dup)
     end
 
     def update(value)
