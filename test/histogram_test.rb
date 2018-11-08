@@ -2,7 +2,7 @@ require 'test_helper'
 
 require 'metriks/histogram'
 
-class HistogramTest < Test::Unit::TestCase
+class HistogramTest < Minitest::Test
   include ThreadHelper
 
   def setup

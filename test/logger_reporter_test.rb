@@ -4,7 +4,7 @@ require 'thread_error_handling_tests'
 require 'logger'
 require 'metriks/reporter/logger'
 
-class LoggerReporterTest < Test::Unit::TestCase
+class LoggerReporterTest < Minitest::Test
   include ThreadErrorHandlingTests
 
   def build_reporter(options={})

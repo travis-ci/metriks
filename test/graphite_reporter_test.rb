@@ -3,7 +3,7 @@ require 'thread_error_handling_tests'
 
 require 'metriks/reporter/graphite'
 
-class GraphiteReporterTest < Test::Unit::TestCase
+class GraphiteReporterTest < Minitest::Test
   include ThreadErrorHandlingTests
 
   def build_reporter(options={})

@@ -2,7 +2,7 @@ require 'test_helper'
 
 require 'metriks/reporter/proc_title'
 
-class ProcTitleReporterTest < Test::Unit::TestCase
+class ProcTitleReporterTest < Minitest::Test
   def setup
     @reporter = Metriks::Reporter::ProcTitle.new
     @original_proctitle = $0.dup

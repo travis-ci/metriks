@@ -2,7 +2,7 @@ require 'test_helper'
 
 require 'metriks/meter'
 
-class MeterTest < Test::Unit::TestCase
+class MeterTest < Minitest::Test
   include ThreadHelper
 
   def setup

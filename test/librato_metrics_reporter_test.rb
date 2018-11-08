@@ -3,7 +3,7 @@ require 'thread_error_handling_tests'
 
 require 'metriks/reporter/librato_metrics'
 
-class LibratoMetricsReporterTest < Test::Unit::TestCase
+class LibratoMetricsReporterTest < Minitest::Test
   include ThreadErrorHandlingTests
 
   def build_reporter(options={})
