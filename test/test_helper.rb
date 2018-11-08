@@ -1,12 +1,11 @@
 require 'minitest/autorun'
-Test = MiniTest
-
 require 'pp'
 
 require 'mocha'
 
 require 'metriks'
 
+Test = MiniTest
 Thread.abort_on_exception = true
 
 module ThreadHelper
