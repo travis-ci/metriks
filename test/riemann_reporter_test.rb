@@ -3,7 +3,7 @@ require 'thread_error_handling_tests'
 
 require 'metriks/reporter/riemann'
 
-class RiemannReporterTest < Test::Unit::TestCase
+class RiemannReporterTest < Minitest::Test
   include ThreadErrorHandlingTests
 
   def build_reporter(options={})

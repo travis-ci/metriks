@@ -42,12 +42,12 @@ Gem::Specification.new do |s|
   s.add_dependency('atomic', ["~> 1.0"])
   s.add_dependency('hitimes', [ "~> 1.1"])
   s.add_dependency('avl_tree', [ "~> 1.2.0" ])
-  s.add_dependency('HDRHistogram', [ "~> 0.1.3" ])
+  s.add_dependency('HDRHistogram', [ "0.1.8" ])
 
   ## List your development dependencies here. Development dependencies are
   ## those that are only needed during development
   # s.add_development_dependency('tomdoc', ["~> 0.2"])
-  s.add_development_dependency('mocha', ['~> 0.10'])
+  s.add_development_dependency('mocha', ['~> 1.7'])
 
   ## Leave this section as-is. It will be automatically generated from the
   ## contents of your Git repository via the gemspec task. DO NOT REMOVE

@@ -2,7 +2,7 @@ require 'test_helper'
 
 require 'metriks/registry'
 
-class RegistryTest < Test::Unit::TestCase
+class RegistryTest < Minitest::Test
   def setup
     @registry = Metriks::Registry.new
   end
@@ -12,23 +12,23 @@ class RegistryTest < Test::Unit::TestCase
   end
 
   def test_counter
-    assert_not_nil @registry.counter('testing')
+    assert @registry.counter('testing') != nil
   end
 
   def test_meter
-    assert_not_nil @registry.meter('testing')
+    assert @registry.meter('testing') != nil
   end
 
   def test_timer
-    assert_not_nil @registry.timer('testing')
+    assert @registry.timer('testing') != nil
   end
 
   def test_utilization_timer
-    assert_not_nil @registry.utilization_timer('testing')
+    assert @registry.utilization_timer('testing') != nil
   end
 
   def test_histogram
-    assert_not_nil @registry.histogram('testing')
+    assert @registry.histogram('testing') != nil
   end
 
   def test_mismatched_metrics
@@ -40,10 +40,10 @@ class RegistryTest < Test::Unit::TestCase
   end
 
   def test_calling_counter_twice
-    assert_not_nil @registry.counter('testing')
+    assert @registry.counter('testing') != nil
   end
 
   def test_default
-    assert_not_nil Metriks::Registry.default
+    assert Metriks::Registry.default != nil
   end
 end

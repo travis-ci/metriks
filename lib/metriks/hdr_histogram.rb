@@ -36,7 +36,7 @@ module Metriks
         @precision_digits,
         multiplier: 0.001, unit: :ms
       )
-      hdr_dup.merge(@hdr)
+      hdr_dup.merge!(@hdr)
       HdrHistogramSnapshot.new(hdr_dup)
     end
 

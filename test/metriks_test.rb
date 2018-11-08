@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class MetriksTest < Test::Unit::TestCase
+class MetriksTest < Minitest::Test
   def setup
     Metriks::Registry.default.clear
   end
@@ -10,22 +10,22 @@ class MetriksTest < Test::Unit::TestCase
   end
 
   def test_counter
-    assert_not_nil Metriks.counter('testing')
+    assert Metriks.counter('testing') != nil
   end
 
   def test_meter
-    assert_not_nil Metriks.meter('testing')
+    assert Metriks.meter('testing') != nil
   end
 
   def test_timer
-    assert_not_nil Metriks.timer('testing')
+    assert Metriks.timer('testing') != nil
   end
 
   def test_utilization_timer
-    assert_not_nil Metriks.utilization_timer('testing')
+    assert Metriks.utilization_timer('testing') != nil
   end
 
   def test_histogram
-    assert_not_nil Metriks.histogram('testing')
+    assert Metriks.histogram('testing') != nil
   end
 end

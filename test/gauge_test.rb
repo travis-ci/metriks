@@ -2,7 +2,7 @@ require 'test_helper'
 
 require 'metriks/gauge'
 
-class GaugeTest < Test::Unit::TestCase
+class GaugeTest < Minitest::Test
   def test_gauge
     gauge = Metriks::Gauge.new
 

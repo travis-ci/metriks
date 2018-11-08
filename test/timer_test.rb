@@ -2,7 +2,7 @@ require 'test_helper'
 
 require 'metriks/timer'
 
-class TimerTest < Test::Unit::TestCase
+class TimerTest < Minitest::Test
   def setup
     @timer = Metriks::Timer.new
   end

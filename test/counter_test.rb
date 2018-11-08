@@ -2,7 +2,7 @@ require 'test_helper'
 
 require 'metriks/counter'
 
-class CounterTest < Test::Unit::TestCase
+class CounterTest < Minitest::Test
   include ThreadHelper
 
   def setup
