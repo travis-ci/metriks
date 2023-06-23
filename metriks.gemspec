@@ -7,7 +7,7 @@
 Gem::Specification.new do |s|
   s.specification_version = 2 if s.respond_to? :specification_version=
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
-  s.rubygems_version = '1.3.5'
+  s.rubygems_version = '3.4.14'
 
   ## Leave these as is they will be modified for you by the rake gemspec task.
   ## If your rubyforge_project name is different, then edit it and comment out
@@ -40,9 +40,9 @@ Gem::Specification.new do |s|
   ## List your runtime dependencies here. Runtime dependencies are those
   ## that are needed for an end user to actually USE your code.
   s.add_dependency('atomic', ["~> 1.0"])
-  s.add_dependency('hitimes', [ "~> 1.1"])
-  s.add_dependency('avl_tree', [ "~> 1.2.0" ])
-  s.add_dependency('HDRHistogram', [ "0.1.9" ])
+  s.add_dependency('hitimes', [ "~> 1.3"])
+  s.add_dependency('avl_tree', [ "~> 1.2" ])
+  s.add_dependency('HDRHistogram', [ "~> 0.1" ])
 
   ## List your development dependencies here. Development dependencies are
   ## those that are only needed during development

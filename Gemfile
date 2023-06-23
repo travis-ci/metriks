@@ -1,14 +1,14 @@
 source 'https://rubygems.org'
 
-ruby '2.5.3'
+ruby '3.2.2'
 
 gemspec
 
-gem 'beefcake', '< 1.0.0'
+gem 'beefcake'
 
 group :test do
   gem 'minitest'
   gem 'rake'
-  gem 'riemann-client', '~> 0.0.7'
+  gem 'riemann-client'
   gem 'rbtree', :platform => :mri_18
 end
