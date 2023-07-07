@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'atomic'
 require 'hitimes'
 
@@ -39,23 +41,21 @@ module Metriks
     end
 
     def update(duration)
-      if duration >= 0
-        @meter.mark
-        @histogram.update(duration)
-        @count += 1
-      end
+      return unless duration >= 0
+
+      @meter.mark
+      @histogram.update(duration)
+      @count += 1
     end
 
     def time(callable = nil, &block)
       callable ||= block
       context = Context.new(self)
 
-      if callable.nil?
-        return context
-      end
+      return context if callable.nil?
 
       begin
-        return callable.call
+        callable.call
       ensure
         context.stop
       end
@@ -65,9 +65,7 @@ module Metriks
       @histogram.snapshot
     end
 
-    def count
-      @count
-    end
+    attr_reader :count
 
     def sum
       @histogram.sum

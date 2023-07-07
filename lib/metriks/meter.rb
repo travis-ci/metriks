@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'atomic'
 
 require 'metriks/ewma'
@@ -35,11 +37,11 @@ module Metriks
       old_tick = @last_tick.value
       new_tick = Time.new.to_f
       age = new_tick - old_tick
-      if age > TICK_INTERVAL && @last_tick.compare_and_swap(old_tick, new_tick)
-        required_ticks = age / TICK_INTERVAL
-        required_ticks.to_i.times do
-          tick
-        end
+      return unless age > TICK_INTERVAL && @last_tick.compare_and_swap(old_tick, new_tick)
+
+      required_ticks = age / TICK_INTERVAL
+      required_ticks.to_i.times do
+        tick
       end
     end
 
@@ -71,15 +73,12 @@ module Metriks
     end
 
     def mean_rate
-      if count == 0
-        return 0.0
-      else
-        elapsed = Time.now.to_f - @start_time
-        count / elapsed
-      end
+      return 0.0 if count == 0
+
+      elapsed = Time.now.to_f - @start_time
+      count / elapsed
     end
 
-    def stop
-    end
+    def stop; end
   end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'metriks/timer'
 
 module Metriks
@@ -14,9 +16,9 @@ module Metriks
 
     def update(duration)
       super
-      if duration >= 0
-        @duration_meter.mark(duration)
-      end
+      return unless duration >= 0
+
+      @duration_meter.mark(duration)
     end
 
     def one_minute_utilization

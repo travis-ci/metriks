@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'logger'
 require 'metriks/time_tracker'
 
@@ -22,8 +24,12 @@ module Metriks::Reporter
 
           begin
             write
-          rescue Exception => ex
-            @on_error[ex] rescue nil
+          rescue Exception => e
+            begin
+              @on_error[e]
+            rescue StandardError
+              nil
+            end
           end
         end
       end
@@ -40,9 +46,9 @@ module Metriks::Reporter
     end
 
     def flush
-      if !@last_write || @last_write.min != Time.now.min
-        write
-      end
+      return unless !@last_write || @last_write.min != Time.now.min
+
+      write
     end
 
     def write
@@ -51,9 +57,9 @@ module Metriks::Reporter
       @registry.each do |name, metric|
         case metric
         when Metriks::Meter
-          log_metric name, 'meter', metric, [
-            :count, :one_minute_rate, :five_minute_rate,
-            :fifteen_minute_rate, :mean_rate
+          log_metric name, 'meter', metric, %i[
+            count one_minute_rate five_minute_rate
+            fifteen_minute_rate mean_rate
           ]
         when Metriks::Counter
           log_metric name, 'counter', metric, [
@@ -64,28 +70,28 @@ module Metriks::Reporter
             :value
           ]
         when Metriks::UtilizationTimer
-          log_metric name, 'utilization_timer', metric, [
-            :count, :one_minute_rate, :five_minute_rate,
-            :fifteen_minute_rate, :mean_rate,
-            :min, :max, :mean, :stddev,
-            :one_minute_utilization, :five_minute_utilization,
-            :fifteen_minute_utilization, :mean_utilization,
-          ], [
-            :median, :get_95th_percentile
+          log_metric name, 'utilization_timer', metric, %i[
+            count one_minute_rate five_minute_rate
+            fifteen_minute_rate mean_rate
+            min max mean stddev
+            one_minute_utilization five_minute_utilization
+            fifteen_minute_utilization mean_utilization
+          ], %i[
+            median get_95th_percentile
           ]
         when Metriks::Timer
-          log_metric name, 'timer', metric, [
-            :count, :one_minute_rate, :five_minute_rate,
-            :fifteen_minute_rate, :mean_rate,
-            :min, :max, :mean, :stddev
-          ], [
-            :median, :get_95th_percentile
+          log_metric name, 'timer', metric, %i[
+            count one_minute_rate five_minute_rate
+            fifteen_minute_rate mean_rate
+            min max mean stddev
+          ], %i[
+            median get_95th_percentile
           ]
         when Metriks::Histogram, Metriks::HdrHistogram
-          log_metric name, 'histogram', metric, [
-            :count, :min, :max, :mean, :stddev
-          ], [
-            :median, :get_95th_percentile
+          log_metric name, 'histogram', metric, %i[
+            count min max mean stddev
+          ], %i[
+            median get_95th_percentile
           ]
         end
 
@@ -96,7 +102,7 @@ module Metriks::Reporter
     def extract_from_metric(metric, *keys)
       keys.flatten.collect do |key|
         name = key.to_s.gsub(/^get_/, '')
-        [ { name => metric.send(key) } ]
+        [{ name => metric.send(key) }]
       end
     end
 
@@ -104,10 +110,10 @@ module Metriks::Reporter
       message = []
 
       message << @prefix if @prefix
-      message << { :time => Time.now.to_i }
+      message << { time: Time.now.to_i }
 
-      message << { :name => name }
-      message << { :type => type }
+      message << ({ name: })
+      message << ({ type: })
       message += extract_from_metric(metric, keys)
 
       unless snapshot_keys.empty?

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Metriks
   class TimeTracker
     def initialize(interval)
@@ -7,9 +9,9 @@ module Metriks
 
     def sleep
       sleep_time = next_time - Time.now.to_f
-      if sleep_time > 0
-        Kernel.sleep(sleep_time)
-      end
+      return unless sleep_time > 0
+
+      Kernel.sleep(sleep_time)
     end
 
     def now_floored

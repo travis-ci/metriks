@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 require 'metriks/hdr_histogram_snapshot'
 require 'HDRHistogram'
 
 module Metriks
   class HdrHistogram
-    def initialize(lowest = 0.001, highest = 60*60, precision_digits = 3)
+    def initialize(lowest = 0.001, highest = 60 * 60, precision_digits = 3)
       @lowest = lowest
       @highest = highest
       @precision_digits = precision_digits
@@ -38,9 +40,7 @@ module Metriks
       @sum += value
     end
 
-    def sum
-      @sum
-    end
+    attr_reader :sum
 
     def max
       @hdr.max

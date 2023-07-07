@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'atomic'
 require 'metriks/uniform_sample'
 require 'metriks/exponentially_decaying_sample'
@@ -21,7 +23,7 @@ module Metriks
       @min      = Atomic.new(nil)
       @max      = Atomic.new(nil)
       @sum      = Atomic.new(0)
-      @variance = Atomic.new([ -1, 0 ])
+      @variance = Atomic.new([-1, 0])
     end
 
     def clear
@@ -30,7 +32,7 @@ module Metriks
       @min.value = nil
       @max.value = nil
       @sum.value = 0
-      @variance.value = [ -1, 0 ]
+      @variance.value = [-1, 0]
     end
 
     def update(value)
@@ -67,7 +69,7 @@ module Metriks
     end
 
     def stddev
-      count > 0 ? variance ** 0.5 : 0.0
+      count > 0 ? variance**0.5 : 0.0
     end
 
     def variance
@@ -77,7 +79,7 @@ module Metriks
     def max=(potential_max)
       done = false
 
-      while !done
+      until done
         current_max = @max.value
         done = (!current_max.nil? && current_max >= potential_max) || @max.compare_and_swap(current_max, potential_max)
       end
@@ -86,7 +88,7 @@ module Metriks
     def min=(potential_min)
       done = false
 
-      while !done
+      until done
         current_min = @min.value
         done = (!current_min.nil? && current_min <= potential_min) || @min.compare_and_swap(current_min, potential_min)
       end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'atomic'
 require 'metriks/snapshot'
 
@@ -31,9 +33,7 @@ module Metriks
         @values[new_count - 1] = value
       else
         idx = rand(new_count)
-        if idx < @values.length
-          @values[idx] = value
-        end
+        @values[idx] = value if idx < @values.length
       end
     end
   end

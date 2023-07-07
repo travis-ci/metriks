@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'atomic'
 require 'red_black_tree'
 require 'metriks/snapshot'
@@ -51,23 +53,19 @@ module Metriks
           @values[priority] = value
         else
           first_priority = @values.first[0]
-          if first_priority < priority
-            unless @values[priority]
-              @values[priority] = value
+          if first_priority < priority && !(@values[priority])
+            @values[priority] = value
 
-              until @values.delete(first_priority)
-                first_priority = @values.first[0]
-              end
-            end
+            first_priority = @values.first[0] until @values.delete(first_priority)
           end
         end
       end
 
       now = Time.new
       next_time = @next_scale_time.value
-      if now >= next_time
-        rescale(now, next_time)
-      end
+      return unless now >= next_time
+
+      rescale(now, next_time)
     end
 
     def weight(time)
@@ -75,26 +73,26 @@ module Metriks
     end
 
     def rescale(now, next_time)
-      if @next_scale_time.compare_and_swap(next_time, now + RESCALE_THRESHOLD)
-        @mutex.synchronize do
-          old_start_time = @start_time
-          @start_time = Time.now
-          @values.keys.each do |key|
-            value = @values.delete(key)
-            new_key = key * Math.exp(-@alpha * (@start_time - old_start_time))
+      return unless @next_scale_time.compare_and_swap(next_time, now + RESCALE_THRESHOLD)
 
-            if key.nan?
-              warn "ExponentiallyDecayingSample found a key of NaN. old_start_time: #{old_start_time.to_f} start_time: #{@start_time.to_f}"
-              next
-            end
+      @mutex.synchronize do
+        old_start_time = @start_time
+        @start_time = Time.now
+        @values.keys.each do |key|
+          value = @values.delete(key)
+          new_key = key * Math.exp(-@alpha * (@start_time - old_start_time))
 
-            if new_key.nan?
-              warn "ExponentiallyDecayingSample found a new_key of NaN. key: #{key} old_start_time: #{old_start_time.to_f} start_time: #{@start_time.to_f}"
-              next
-            end
-
-            @values[new_key] = value
+          if key.nan?
+            warn "ExponentiallyDecayingSample found a key of NaN. old_start_time: #{old_start_time.to_f} start_time: #{@start_time.to_f}"
+            next
           end
+
+          if new_key.nan?
+            warn "ExponentiallyDecayingSample found a new_key of NaN. key: #{key} old_start_time: #{old_start_time.to_f} start_time: #{@start_time.to_f}"
+            next
+          end
+
+          @values[new_key] = value
         end
       end
     end

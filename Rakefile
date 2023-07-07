@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rubygems'
 require 'rake'
 require 'date'
@@ -34,7 +36,7 @@ def gem_file
 end
 
 def replace_header(head, header_name)
-  head.sub!(/(\.#{header_name}\s*= ').*'/) { "#{$1}#{send(header_name)}'"}
+  head.sub!(/(\.#{header_name}\s*= ').*'/) { "#{Regexp.last_match(1)}#{send(header_name)}'" }
 end
 
 #############################################################################
@@ -43,7 +45,7 @@ end
 #
 #############################################################################
 
-task :default => :test
+task default: :test
 
 require 'rake/testtask'
 Rake::TestTask.new(:test) do |test|
@@ -52,12 +54,12 @@ Rake::TestTask.new(:test) do |test|
   test.verbose = true
 end
 
-desc "Generate RCov test coverage and open in your browser"
+desc 'Generate RCov test coverage and open in your browser'
 task :coverage do
   require 'rcov'
-  sh "rm -fr coverage"
-  sh "rcov test/*_test.rb"
-  sh "open coverage/index.html"
+  sh 'rm -fr coverage'
+  sh 'rcov test/*_test.rb'
+  sh 'open coverage/index.html'
 end
 
 # require 'rdoc/task'
@@ -68,7 +70,7 @@ end
 #   rdoc.rdoc_files.include('lib/**/*.rb')
 # end
 
-desc "Open an irb session preloaded with this library"
+desc 'Open an irb session preloaded with this library'
 task :console do
   sh "irb -rubygems -r ./lib/#{name}.rb"
 end
@@ -79,8 +81,6 @@ end
 #
 #############################################################################
 
-
-
 #############################################################################
 #
 # Packaging tasks
@@ -88,27 +88,27 @@ end
 #############################################################################
 
 desc "Create tag v#{version} and build and push #{gem_file} to Rubygems"
-task :release => :build do
+task release: :build do
   unless `git branch` =~ /^\* master$/
-    puts "You must be on the master branch to release!"
+    puts 'You must be on the master branch to release!'
     exit!
   end
   sh "git commit --allow-empty -a -m 'Release #{version}'"
   sh "git tag v#{version}"
-  sh "git push origin master"
+  sh 'git push origin master'
   sh "git push origin v#{version}"
   sh "gem push pkg/#{name}-#{version}.gem"
 end
 
 desc "Build #{gem_file} into the pkg directory"
-task :build => :gemspec do
-  sh "mkdir -p pkg"
+task build: :gemspec do
+  sh 'mkdir -p pkg'
   sh "gem build #{gemspec_file}"
   sh "mv #{gem_file} pkg"
 end
 
 desc "Generate #{gemspec_file}"
-task :gemspec => :validate do
+task gemspec: :validate do
   # read spec file and split out manifest section
   spec = File.read(gemspec_file)
   head, manifest, tail = spec.split("  # = MANIFEST =\n")
@@ -117,17 +117,17 @@ task :gemspec => :validate do
   replace_header(head, :name)
   replace_header(head, :version)
   replace_header(head, :date)
-  #comment this out if your rubyforge_project has a different name
+  # comment this out if your rubyforge_project has a different name
   replace_header(head, :rubyforge_project)
 
   # determine file list from git ls-files
-  files = `git ls-files`.
-    split("\n").
-    sort.
-    reject { |file| file =~ /^\./ }.
-    reject { |file| file =~ /^(rdoc|pkg)/ }.
-    map { |file| "    #{file}" }.
-    join("\n")
+  files = `git ls-files`
+          .split("\n")
+          .sort
+          .reject { |file| file =~ /^\./ }
+          .reject { |file| file =~ /^(rdoc|pkg)/ }
+          .map { |file| "    #{file}" }
+          .join("\n")
 
   # piece file back together and write
   manifest = "  s.files = %w[\n#{files}\n  ]\n"
@@ -144,7 +144,7 @@ task :validate do
     exit!
   end
   unless Dir['VERSION*'].empty?
-    puts "A `VERSION` file at root level violates Gem best practices."
+    puts 'A `VERSION` file at root level violates Gem best practices.'
     exit!
   end
 end

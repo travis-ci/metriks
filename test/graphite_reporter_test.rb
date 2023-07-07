@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 require 'thread_error_handling_tests'
 
@@ -6,8 +8,8 @@ require 'metriks/reporter/graphite'
 class GraphiteReporterTest < Minitest::Test
   include ThreadErrorHandlingTests
 
-  def build_reporter(options={})
-    Metriks::Reporter::Graphite.new('localhost', 3333, { :registry => @registry }.merge(options))
+  def build_reporter(options = {})
+    Metriks::Reporter::Graphite.new('localhost', 3333, { registry: @registry }.merge(options))
   end
 
   def setup
@@ -34,8 +36,8 @@ class GraphiteReporterTest < Minitest::Test
 
     @reporter.write
 
-    assert_match /timer.testing.median \d/, @stringio.string
-    assert_match /gauge.testing.value 123/, @stringio.string
-    assert_match /gauge.testing.block.value 456/, @stringio.string
+    assert_match(/timer.testing.median \d/, @stringio.string)
+    assert_match(/gauge.testing.value 123/, @stringio.string)
+    assert_match(/gauge.testing.block.value 456/, @stringio.string)
   end
 end
