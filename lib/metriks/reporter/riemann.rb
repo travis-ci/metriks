@@ -20,7 +20,7 @@ module Metriks::Reporter
     end
 
     def start
-      @thread ||= Thread.new do
+      @_start ||= Thread.new do
         loop do
           sleep @interval
 
@@ -38,7 +38,7 @@ module Metriks::Reporter
     end
 
     def stop
-      @thread.kill if @thread
+      @thread&.kill
       @thread = nil
     end
 

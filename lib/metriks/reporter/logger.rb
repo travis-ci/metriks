@@ -8,7 +8,7 @@ module Metriks::Reporter
     attr_accessor :prefix, :log_level, :logger
 
     def initialize(options = {})
-      @logger    = options[:logger]    || ::Logger.new(STDOUT)
+      @logger    = options[:logger]    || ::Logger.new($stdout)
       @log_level = options[:log_level] || ::Logger::INFO
       @prefix    = options[:prefix]    || 'metriks:'
 
@@ -18,7 +18,7 @@ module Metriks::Reporter
     end
 
     def start
-      @thread ||= Thread.new do
+      @_start ||= Thread.new do
         loop do
           @time_tracker.sleep
 
@@ -36,7 +36,7 @@ module Metriks::Reporter
     end
 
     def stop
-      @thread.kill if @thread
+      @thread&.kill
       @thread = nil
     end
 

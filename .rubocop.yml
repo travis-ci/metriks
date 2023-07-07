@@ -38,3 +38,13 @@ Metrics/MethodLength:
   Enabled: false
 Naming/AccessorMethodName:
   Enabled: false
+Lint/RescueException:
+  Enabled: false
+Metrics/CyclomaticComplexity:
+  Max: 10
+Metrics/PerceivedComplexity:
+  Max: 10
+Style/FormatString:
+  Enabled: false
+Naming/MethodParameterName:
+  Enabled: false

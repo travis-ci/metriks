@@ -18,15 +18,13 @@ module ThreadHelper
     n = opts[:n] || 1
     results = []
 
-    threads.times.map do |i|
+    Array.new(threads) do |i|
       Thread.new do
         n.times do
           results[i] = yield i
         end
       end
-    end.each do |thread|
-      thread.join
-    end
+    end.each(&:join)
 
     results
   end

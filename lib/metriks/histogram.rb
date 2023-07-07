@@ -57,19 +57,19 @@ module Metriks
     end
 
     def max
-      count > 0 ? @max.value : 0.0
+      count.positive? ? @max.value : 0.0
     end
 
     def min
-      count > 0 ? @min.value : 0.0
+      count.positive? ? @min.value : 0.0
     end
 
     def mean
-      count > 0 ? @sum.value / count : 0.0
+      count.positive? ? @sum.value / count : 0.0
     end
 
     def stddev
-      count > 0 ? variance**0.5 : 0.0
+      count.positive? ? variance**0.5 : 0.0
     end
 
     def variance

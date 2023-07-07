@@ -4,7 +4,7 @@ module Metriks::Reporter
   class ProcTitle
     def initialize(options = {})
       @rounding = options[:rounding] || 1
-      @prefix   = options[:prefix]   || $0.dup
+      @prefix   = options[:prefix]   || $PROGRAM_NAME.dup
 
       @interval  = options[:interval] || 5
       @on_error  = options[:on_error] || proc { |ex| }
@@ -21,7 +21,7 @@ module Metriks::Reporter
     end
 
     def start
-      @thread ||= Thread.new do
+      @_start ||= Thread.new do
         loop do
           begin
             unless @metrics.empty?
@@ -41,7 +41,7 @@ module Metriks::Reporter
     end
 
     def stop
-      @thread.kill if @thread
+      @thread&.kill
       @thread = nil
     end
 

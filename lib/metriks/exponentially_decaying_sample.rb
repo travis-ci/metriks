@@ -78,7 +78,7 @@ module Metriks
       @mutex.synchronize do
         old_start_time = @start_time
         @start_time = Time.now
-        @values.keys.each do |key|
+        @values.each_key do |key|
           value = @values.delete(key)
           new_key = key * Math.exp(-@alpha * (@start_time - old_start_time))
 

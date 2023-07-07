@@ -18,12 +18,12 @@ module Metriks::Reporter
     end
 
     def socket
-      @socket = nil if @socket && @socket.closed?
-      @socket ||= TCPSocket.new(@host, @port)
+      @socket = nil if @socket&.closed?
+      @_socket ||= TCPSocket.new(@host, @port)
     end
 
     def start
-      @thread ||= Thread.new do
+      @_start ||= Thread.new do
         loop do
           sleep @interval
 
@@ -41,7 +41,7 @@ module Metriks::Reporter
     end
 
     def stop
-      @thread.kill if @thread
+      @thread&.kill
       @thread = nil
     end
 

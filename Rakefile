@@ -11,7 +11,7 @@ require 'date'
 #############################################################################
 
 def name
-  @name ||= Dir['*.gemspec'].first.split('.').first
+  @_name ||= Dir['*.gemspec'].first.split('.').first
 end
 
 def version
@@ -89,7 +89,7 @@ end
 
 desc "Create tag v#{version} and build and push #{gem_file} to Rubygems"
 task release: :build do
-  unless `git branch` =~ /^\* master$/
+  unless /^\* master$/.match?(`git branch`)
     puts 'You must be on the master branch to release!'
     exit!
   end
@@ -111,7 +111,7 @@ desc "Generate #{gemspec_file}"
 task gemspec: :validate do
   # read spec file and split out manifest section
   spec = File.read(gemspec_file)
-  head, manifest, tail = spec.split("  # = MANIFEST =\n")
+  head, _, tail = spec.split("  # = MANIFEST =\n")
 
   # replace name version and date
   replace_header(head, :name)

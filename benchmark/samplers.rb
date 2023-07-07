@@ -28,13 +28,13 @@ class TimerBenchmarker
     @mapping.each do |key, timer|
       @results[key] = Benchmark.realtime do
         if timer
-          for i in 1..iter
+          (1..iter).each do |_|
             timer.time do
               fib(fib_times)
             end
           end
         else
-          for i in 1..iter
+          (1..iter).each do |_|
             fib(fib_times)
           end
         end
@@ -48,7 +48,7 @@ class TimerBenchmarker
     results.each_with_index do |(name, time), idx|
       puts format('%23s: %f secs %f secs/call', name, time, time / iter)
 
-      if idx > 0
+      if idx.positive?
         prev_name, prev_time = results[idx - 1]
         puts format("#{' ' * 25} - %.1f%% slower than %s (%f secs/call)", (time - prev_time) / prev_time * 100,
                     prev_name, (time - prev_time) / iter)

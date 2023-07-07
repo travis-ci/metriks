@@ -7,7 +7,7 @@ require 'metriks/reporter/proc_title'
 class ProcTitleReporterTest < Minitest::Test
   def setup
     @reporter = Metriks::Reporter::ProcTitle.new
-    @original_proctitle = $0.dup
+    @original_proctitle = $PROGRAM_NAME.dup
   end
 
   def teardown

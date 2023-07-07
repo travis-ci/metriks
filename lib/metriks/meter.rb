@@ -73,7 +73,7 @@ module Metriks
     end
 
     def mean_rate
-      return 0.0 if count == 0
+      return 0.0 if count.zero?
 
       elapsed = Time.now.to_f - @start_time
       count / elapsed

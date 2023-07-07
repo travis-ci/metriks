@@ -20,7 +20,7 @@ module Metriks::Reporter
     end
 
     def start
-      @thread ||= Thread.new do
+      @_start ||= Thread.new do
         loop do
           @time_tracker.sleep
 
@@ -38,7 +38,7 @@ module Metriks::Reporter
     end
 
     def stop
-      @thread.kill if @thread
+      @thread&.kill
       @thread = nil
     end
 
@@ -113,7 +113,7 @@ module Metriks::Reporter
       store.set_default_paths
       http.cert_store = store
 
-      case res = http.start { |http| http.request(req) }
+      case res = http.start { |conn| conn.request(req) }
       when Net::HTTPSuccess, Net::HTTPRedirection
         # OK
       else

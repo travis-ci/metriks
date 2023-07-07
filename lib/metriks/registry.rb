@@ -14,7 +14,7 @@ module Metriks
     #
     # Returns the default Registry for the process.
     def self.default
-      @default ||= new
+      @_default ||= new
     end
 
     # Public: Initializes a new Registry.
@@ -214,7 +214,7 @@ module Metriks
           return metric
 
         else
-          @metrics[name] = create_metric ? create_metric.call : klass.new
+          @metrics[name] = create_metric ? yield : klass.new
         end
       end
     end

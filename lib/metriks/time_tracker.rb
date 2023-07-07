@@ -9,7 +9,7 @@ module Metriks
 
     def sleep
       sleep_time = next_time - Time.now.to_f
-      return unless sleep_time > 0
+      return unless sleep_time.positive?
 
       Kernel.sleep(sleep_time)
     end
