@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'metriks/counter'
 require 'metriks/timer'
 require 'metriks/utilization_timer'
@@ -12,7 +14,7 @@ module Metriks
     #
     # Returns the default Registry for the process.
     def self.default
-      @default ||= new
+      @_default ||= new
     end
 
     # Public: Initializes a new Registry.
@@ -39,7 +41,7 @@ module Metriks
     # Returns nothing.
     def clear
       @mutex.synchronize do
-        @metrics.each do |key, metric|
+        @metrics.each do |_key, metric|
           metric.stop if metric.respond_to?(:stop)
         end
 
@@ -196,25 +198,23 @@ module Metriks
     # Raises RuntimeError if the metric name is already defined
     def add(name, metric)
       @mutex.synchronize do
-        if @metrics[name]
-          raise "Metric '#{name}' already defined"
-        else
-          @metrics[name] = metric
-        end
+        raise "Metric '#{name}' already defined" if @metrics[name]
+
+        @metrics[name] = metric
       end
     end
 
     protected
+
     def add_or_get(name, klass, &create_metric)
       @mutex.synchronize do
         if metric = @metrics[name]
-          if !metric.is_a?(klass)
-            raise "Metric already defined as '#{metric.class}'"
-          else
-            return metric
-          end
+          raise "Metric already defined as '#{metric.class}'" unless metric.is_a?(klass)
+
+          return metric
+
         else
-          @metrics[name] = create_metric ? create_metric.call : klass.new
+          @metrics[name] = create_metric ? yield : klass.new
         end
       end
     end

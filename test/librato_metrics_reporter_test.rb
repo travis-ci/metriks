@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 require 'thread_error_handling_tests'
 
@@ -6,8 +8,8 @@ require 'metriks/reporter/librato_metrics'
 class LibratoMetricsReporterTest < Minitest::Test
   include ThreadErrorHandlingTests
 
-  def build_reporter(options={})
-    Metriks::Reporter::LibratoMetrics.new('user', 'password', { :registry => @registry }.merge(options))
+  def build_reporter(options = {})
+    Metriks::Reporter::LibratoMetrics.new('user', 'password', { registry: @registry }.merge(options))
   end
 
   def setup

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 require 'metriks/meter'
@@ -20,7 +22,7 @@ class MeterTest < Minitest::Test
   end
 
   def test_meter_threaded
-    thread 10, :n => 100 do
+    thread 10, n: 100 do
       @meter.mark
     end
 

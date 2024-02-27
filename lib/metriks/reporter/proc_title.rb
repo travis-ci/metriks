@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 module Metriks::Reporter
   class ProcTitle
     def initialize(options = {})
       @rounding = options[:rounding] || 1
-      @prefix   = options[:prefix]   || $0.dup
+      @prefix   = options[:prefix]   || $PROGRAM_NAME.dup
 
       @interval  = options[:interval] || 5
       @on_error  = options[:on_error] || proc { |ex| }
@@ -11,7 +13,7 @@ module Metriks::Reporter
     end
 
     def add(name, suffix = nil, &block)
-      @metrics << [ name, suffix, block ]
+      @metrics << [name, suffix, block]
     end
 
     def empty?
@@ -19,17 +21,19 @@ module Metriks::Reporter
     end
 
     def start
-      @thread ||= Thread.new do
+      @_start ||= Thread.new do
         loop do
           begin
             unless @metrics.empty?
               title = generate_title
-              if title && !title.empty?
-                $0 = "#{@prefix} #{title}"
-              end
+              $0 = "#{@prefix} #{title}" if title && !title.empty?
             end
-          rescue Exception => ex
-            @on_error[ex] rescue nil
+          rescue Exception => e
+            begin
+              @on_error[e]
+            rescue StandardError
+              nil
+            end
           end
           sleep @interval
         end
@@ -37,7 +41,7 @@ module Metriks::Reporter
     end
 
     def stop
-      @thread.kill if @thread
+      @thread&.kill
       @thread = nil
     end
 
@@ -47,6 +51,7 @@ module Metriks::Reporter
     end
 
     protected
+
     def generate_title
       @metrics.collect do |name, suffix, block|
         val = block.call

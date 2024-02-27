@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class MetriksTest < Minitest::Test
@@ -10,22 +12,22 @@ class MetriksTest < Minitest::Test
   end
 
   def test_counter
-    assert Metriks.counter('testing') != nil
+    assert !Metriks.counter('testing').nil?
   end
 
   def test_meter
-    assert Metriks.meter('testing') != nil
+    assert !Metriks.meter('testing').nil?
   end
 
   def test_timer
-    assert Metriks.timer('testing') != nil
+    assert !Metriks.timer('testing').nil?
   end
 
   def test_utilization_timer
-    assert Metriks.utilization_timer('testing') != nil
+    assert !Metriks.utilization_timer('testing').nil?
   end
 
   def test_histogram
-    assert Metriks.histogram('testing') != nil
+    assert !Metriks.histogram('testing').nil?
   end
 end

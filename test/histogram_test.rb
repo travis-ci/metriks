@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 require 'metriks/histogram'
@@ -5,8 +7,7 @@ require 'metriks/histogram'
 class HistogramTest < Minitest::Test
   include ThreadHelper
 
-  def setup
-  end
+  def setup; end
 
   def test_uniform_sample_min
     @histogram = Metriks::Histogram.new(Metriks::UniformSample.new(Metriks::Histogram::DEFAULT_SAMPLE_SIZE))
@@ -38,14 +39,14 @@ class HistogramTest < Minitest::Test
   def test_uniform_sample_mean_threaded
     @histogram = Metriks::Histogram.new(Metriks::UniformSample.new(Metriks::Histogram::DEFAULT_SAMPLE_SIZE))
 
-    thread 10, :n => 100 do
+    thread 10, n: 100 do
       @histogram.update(5)
       @histogram.update(10)
     end
 
     assert_equal 7, @histogram.mean
   end
-  
+
   def test_uniform_sample_2000
     @histogram = Metriks::Histogram.new(Metriks::UniformSample.new(Metriks::Histogram::DEFAULT_SAMPLE_SIZE))
 
@@ -55,16 +56,14 @@ class HistogramTest < Minitest::Test
 
     assert_equal 1999, @histogram.max
   end
-  
+
   def test_uniform_sample_2000_threaded
     @histogram = Metriks::Histogram.new(Metriks::UniformSample.new(Metriks::Histogram::DEFAULT_SAMPLE_SIZE))
 
     t = 10
     thread t do |i|
       2000.times do |x|
-        if (x % t) == i
-          @histogram.update x
-        end
+        @histogram.update x if (x % t) == i
       end
     end
 
@@ -98,16 +97,20 @@ class HistogramTest < Minitest::Test
   end
 
   def test_exponential_sample_min
-    @histogram = Metriks::Histogram.new(Metriks::ExponentiallyDecayingSample.new(Metriks::Histogram::DEFAULT_SAMPLE_SIZE, Metriks::Histogram::DEFAULT_ALPHA))
+    @histogram = Metriks::Histogram.new(Metriks::ExponentiallyDecayingSample.new(
+                                          Metriks::Histogram::DEFAULT_SAMPLE_SIZE, Metriks::Histogram::DEFAULT_ALPHA
+                                        ))
 
     @histogram.update(5)
     @histogram.update(10)
 
     assert_equal 5, @histogram.min
   end
-  
+
   def test_exponential_sample_max
-    @histogram = Metriks::Histogram.new(Metriks::ExponentiallyDecayingSample.new(Metriks::Histogram::DEFAULT_SAMPLE_SIZE, Metriks::Histogram::DEFAULT_ALPHA))
+    @histogram = Metriks::Histogram.new(Metriks::ExponentiallyDecayingSample.new(
+                                          Metriks::Histogram::DEFAULT_SAMPLE_SIZE, Metriks::Histogram::DEFAULT_ALPHA
+                                        ))
 
     @histogram.update(5)
     @histogram.update(10)
@@ -116,18 +119,22 @@ class HistogramTest < Minitest::Test
   end
 
   def test_exponential_sample_mean
-    @histogram = Metriks::Histogram.new(Metriks::ExponentiallyDecayingSample.new(Metriks::Histogram::DEFAULT_SAMPLE_SIZE, Metriks::Histogram::DEFAULT_ALPHA))
+    @histogram = Metriks::Histogram.new(Metriks::ExponentiallyDecayingSample.new(
+                                          Metriks::Histogram::DEFAULT_SAMPLE_SIZE, Metriks::Histogram::DEFAULT_ALPHA
+                                        ))
 
     @histogram.update(5)
     @histogram.update(10)
 
     assert_equal 7, @histogram.mean
   end
-  
-  def test_exponential_sample_mean_threaded
-    @histogram = Metriks::Histogram.new(Metriks::ExponentiallyDecayingSample.new(Metriks::Histogram::DEFAULT_SAMPLE_SIZE, Metriks::Histogram::DEFAULT_ALPHA))
 
-    thread 10, :n => 100 do
+  def test_exponential_sample_mean_threaded
+    @histogram = Metriks::Histogram.new(Metriks::ExponentiallyDecayingSample.new(
+                                          Metriks::Histogram::DEFAULT_SAMPLE_SIZE, Metriks::Histogram::DEFAULT_ALPHA
+                                        ))
+
+    thread 10, n: 100 do
       @histogram.update(5)
       @histogram.update(10)
     end
@@ -136,7 +143,9 @@ class HistogramTest < Minitest::Test
   end
 
   def test_exponential_sample_2000
-    @histogram = Metriks::Histogram.new(Metriks::ExponentiallyDecayingSample.new(Metriks::Histogram::DEFAULT_SAMPLE_SIZE, Metriks::Histogram::DEFAULT_ALPHA))
+    @histogram = Metriks::Histogram.new(Metriks::ExponentiallyDecayingSample.new(
+                                          Metriks::Histogram::DEFAULT_SAMPLE_SIZE, Metriks::Histogram::DEFAULT_ALPHA
+                                        ))
 
     2000.times do |idx|
       @histogram.update(idx)
@@ -144,16 +153,16 @@ class HistogramTest < Minitest::Test
 
     assert_equal 1999, @histogram.max
   end
-  
+
   def test_exponential_sample_2000_threaded
-    @histogram = Metriks::Histogram.new(Metriks::ExponentiallyDecayingSample.new(Metriks::Histogram::DEFAULT_SAMPLE_SIZE, Metriks::Histogram::DEFAULT_ALPHA))
+    @histogram = Metriks::Histogram.new(Metriks::ExponentiallyDecayingSample.new(
+                                          Metriks::Histogram::DEFAULT_SAMPLE_SIZE, Metriks::Histogram::DEFAULT_ALPHA
+                                        ))
 
     t = 10
     thread t do |i|
       2000.times do |idx|
-        if (idx % t) == i
-          @histogram.update(idx)
-        end
+        @histogram.update(idx) if (idx % t) == i
       end
     end
 
@@ -161,7 +170,9 @@ class HistogramTest < Minitest::Test
   end
 
   def test_exponential_sample_snashot
-    @histogram = Metriks::Histogram.new(Metriks::ExponentiallyDecayingSample.new(Metriks::Histogram::DEFAULT_SAMPLE_SIZE, Metriks::Histogram::DEFAULT_ALPHA))
+    @histogram = Metriks::Histogram.new(Metriks::ExponentiallyDecayingSample.new(
+                                          Metriks::Histogram::DEFAULT_SAMPLE_SIZE, Metriks::Histogram::DEFAULT_ALPHA
+                                        ))
 
     100.times do |idx|
       @histogram.update(idx)
@@ -173,7 +184,9 @@ class HistogramTest < Minitest::Test
   end
 
   def test_exponential_sample_snapshot_threaded
-    @histogram = Metriks::Histogram.new(Metriks::ExponentiallyDecayingSample.new(Metriks::Histogram::DEFAULT_SAMPLE_SIZE, Metriks::Histogram::DEFAULT_ALPHA))
+    @histogram = Metriks::Histogram.new(Metriks::ExponentiallyDecayingSample.new(
+                                          Metriks::Histogram::DEFAULT_SAMPLE_SIZE, Metriks::Histogram::DEFAULT_ALPHA
+                                        ))
 
     thread 10 do
       100.times do |idx|
@@ -188,7 +201,8 @@ class HistogramTest < Minitest::Test
 
   def test_long_idle_sample
     Time.stubs(:now).returns(Time.at(2000))
-    sample = Metriks::ExponentiallyDecayingSample.new(Metriks::Histogram::DEFAULT_SAMPLE_SIZE, Metriks::Histogram::DEFAULT_ALPHA)
+    sample = Metriks::ExponentiallyDecayingSample.new(Metriks::Histogram::DEFAULT_SAMPLE_SIZE,
+                                                      Metriks::Histogram::DEFAULT_ALPHA)
     Time.unstub(:now)
     @histogram = Metriks::Histogram.new(sample)
 

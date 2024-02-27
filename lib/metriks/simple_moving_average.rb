@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'atomic'
 
 module Metriks
@@ -45,7 +47,8 @@ module Metriks
     end
 
     def rate
-      num, count = 0.0, 0.0
+      num = 0.0
+      count = 0.0
 
       @values.each do |value|
         if v = value.value

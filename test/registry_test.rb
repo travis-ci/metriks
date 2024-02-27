@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 require 'metriks/registry'
@@ -12,23 +14,23 @@ class RegistryTest < Minitest::Test
   end
 
   def test_counter
-    assert @registry.counter('testing') != nil
+    assert !@registry.counter('testing').nil?
   end
 
   def test_meter
-    assert @registry.meter('testing') != nil
+    assert !@registry.meter('testing').nil?
   end
 
   def test_timer
-    assert @registry.timer('testing') != nil
+    assert !@registry.timer('testing').nil?
   end
 
   def test_utilization_timer
-    assert @registry.utilization_timer('testing') != nil
+    assert !@registry.utilization_timer('testing').nil?
   end
 
   def test_histogram
-    assert @registry.histogram('testing') != nil
+    assert !@registry.histogram('testing').nil?
   end
 
   def test_mismatched_metrics
@@ -40,10 +42,10 @@ class RegistryTest < Minitest::Test
   end
 
   def test_calling_counter_twice
-    assert @registry.counter('testing') != nil
+    assert !@registry.counter('testing').nil?
   end
 
   def test_default
-    assert Metriks::Registry.default != nil
+    assert !Metriks::Registry.default.nil?
   end
 end

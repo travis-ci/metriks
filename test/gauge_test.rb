@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 require 'metriks/gauge'
@@ -19,7 +21,7 @@ class GaugeTest < Minitest::Test
 
   def test_gauge_default
     gauge = Metriks::Gauge.new
-    assert_equal nil, gauge.value
+    assert_nil gauge.value
   end
 
   def test_gauge_callback_via_block
@@ -29,11 +31,11 @@ class GaugeTest < Minitest::Test
   end
 
   def test_gauge_callback_via_callable_object
-    callable = Class.new(Struct.new(:value)) {
+    callable = Class.new(Struct.new(:value)) do
       def call
         value
       end
-    }
+    end
 
     gauge = Metriks::Gauge.new(callable.new(987))
 

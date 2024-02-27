@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Metriks
   class Snapshot
     MEDIAN_Q = 0.5
@@ -14,7 +16,7 @@ module Metriks
     end
 
     def value(quantile)
-      raise ArgumentError, "quantile must be between 0.0 and 1.0" if quantile < 0.0 || quantile > 1.0
+      raise ArgumentError, 'quantile must be between 0.0 and 1.0' if quantile < 0.0 || quantile > 1.0
 
       return 0.0 if @values.empty?
 

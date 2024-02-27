@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 require 'thread_error_handling_tests'
 
@@ -7,8 +9,8 @@ require 'metriks/reporter/logger'
 class LoggerReporterTest < Minitest::Test
   include ThreadErrorHandlingTests
 
-  def build_reporter(options={})
-    Metriks::Reporter::Logger.new({ :registry => @registry, :logger => @logger }.merge(options))
+  def build_reporter(options = {})
+    Metriks::Reporter::Logger.new({ registry: @registry, logger: @logger }.merge(options))
   end
 
   def setup
@@ -34,16 +36,16 @@ class LoggerReporterTest < Minitest::Test
   def test_write
     @reporter.write
 
-    assert_match /time=\d/, @stringio.string
-    assert_match /median=\d/, @stringio.string
-    assert_match /value=123/, @stringio.string
+    assert_match(/time=\d/, @stringio.string)
+    assert_match(/median=\d/, @stringio.string)
+    assert_match(/value=123/, @stringio.string)
   end
 
   def test_flush
     @reporter.flush
 
-    assert_match /time=\d/, @stringio.string
-    assert_match /median=\d/, @stringio.string
-    assert_match /value=123/, @stringio.string
+    assert_match(/time=\d/, @stringio.string)
+    assert_match(/median=\d/, @stringio.string)
+    assert_match(/value=123/, @stringio.string)
   end
 end

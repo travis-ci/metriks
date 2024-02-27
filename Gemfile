@@ -1,14 +1,24 @@
+# frozen_string_literal: true
+
 source 'https://rubygems.org'
 
-ruby '2.5.3'
+ruby '3.2.2'
 
 gemspec
 
-gem 'beefcake', '< 1.0.0'
+gem 'beefcake'
 
 group :test do
   gem 'minitest'
   gem 'rake'
-  gem 'riemann-client', '~> 0.0.7'
-  gem 'rbtree', :platform => :mri_18
+  gem 'rbtree', platform: :mri_18
+  gem 'riemann-client'
+end
+
+group :development, :test do
+  gem 'rubocop'
+  gem 'rubocop-performance'
+  gem 'rubocop-rspec'
+  gem 'simplecov'
+  gem 'simplecov-console'
 end

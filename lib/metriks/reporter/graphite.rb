@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'socket'
 
 module Metriks::Reporter
@@ -16,20 +18,22 @@ module Metriks::Reporter
     end
 
     def socket
-      @socket = nil if @socket && @socket.closed?
-      @socket ||= TCPSocket.new(@host, @port)
+      @socket = nil if @socket&.closed?
+      @_socket ||= TCPSocket.new(@host, @port)
     end
 
     def start
-      @thread ||= Thread.new do
+      @_start ||= Thread.new do
         loop do
           sleep @interval
 
           Thread.new do
+            write
+          rescue Exception => e
             begin
-              write
-            rescue Exception => ex
-              @on_error[ex] rescue nil
+              @on_error[e]
+            rescue StandardError
+              nil
             end
           end
         end
@@ -37,7 +41,7 @@ module Metriks::Reporter
     end
 
     def stop
-      @thread.kill if @thread
+      @thread&.kill
       @thread = nil
     end
 
@@ -50,9 +54,9 @@ module Metriks::Reporter
       @registry.each do |name, metric|
         case metric
         when Metriks::Meter
-          write_metric name, metric, [
-            :count, :one_minute_rate, :five_minute_rate,
-            :fifteen_minute_rate, :mean_rate
+          write_metric name, metric, %i[
+            count one_minute_rate five_minute_rate
+            fifteen_minute_rate mean_rate
           ]
         when Metriks::Counter
           write_metric name, metric, [
@@ -63,28 +67,28 @@ module Metriks::Reporter
             :value
           ]
         when Metriks::UtilizationTimer
-          write_metric name, metric, [
-            :count, :one_minute_rate, :five_minute_rate,
-            :fifteen_minute_rate, :mean_rate,
-            :min, :max, :mean, :stddev,
-            :one_minute_utilization, :five_minute_utilization,
-            :fifteen_minute_utilization, :mean_utilization,
-          ], [
-            :median, :get_95th_percentile
+          write_metric name, metric, %i[
+            count one_minute_rate five_minute_rate
+            fifteen_minute_rate mean_rate
+            min max mean stddev
+            one_minute_utilization five_minute_utilization
+            fifteen_minute_utilization mean_utilization
+          ], %i[
+            median get_95th_percentile
           ]
         when Metriks::Timer
-          write_metric name, metric, [
-            :count, :one_minute_rate, :five_minute_rate,
-            :fifteen_minute_rate, :mean_rate,
-            :min, :max, :mean, :stddev
-          ], [
-            :median, :get_95th_percentile
+          write_metric name, metric, %i[
+            count one_minute_rate five_minute_rate
+            fifteen_minute_rate mean_rate
+            min max mean stddev
+          ], %i[
+            median get_95th_percentile
           ]
         when Metriks::Histogram, Metriks::HdrHistogram
-          write_metric name, metric, [
-            :count, :min, :max, :mean, :stddev
-          ], [
-            :median, :get_95th_percentile
+          write_metric name, metric, %i[
+            count min max mean stddev
+          ], %i[
+            median get_95th_percentile
           ]
         end
 
@@ -96,9 +100,7 @@ module Metriks::Reporter
       time = Time.now.to_i
 
       base_name = base_name.to_s.gsub(/ +/, '_')
-      if @prefix
-        base_name = "#{@prefix}.#{base_name}"
-      end
+      base_name = "#{@prefix}.#{base_name}" if @prefix
 
       keys.flatten.each do |key|
         name = key.to_s.gsub(/^get_/, '')

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'HDRHistogram'
 
 module Metriks
@@ -9,9 +11,9 @@ module Metriks
     end
 
     def value(quantile)
-      raise ArgumentError, "quantile must be between 0.0 and 1.0" if quantile < 0.0 || quantile > 1.0
+      raise ArgumentError, 'quantile must be between 0.0 and 1.0' if quantile < 0.0 || quantile > 1.0
 
-      @hdr.percentile(quantile*100)
+      @hdr.percentile(quantile * 100)
     end
 
     def size

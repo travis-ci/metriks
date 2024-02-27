@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 require 'metriks/counter'
@@ -16,7 +18,7 @@ class CounterTest < Minitest::Test
   end
 
   def test_increment_threaded
-    thread 10, :n => 100 do
+    thread 10, n: 100 do
       @counter.increment
     end
 
@@ -28,12 +30,12 @@ class CounterTest < Minitest::Test
 
     assert_equal 10, @counter.count
   end
-  
+
   def test_increment_by_more_threaded
-    thread 10, :n => 100 do
+    thread 10, n: 100 do
       @counter.increment 10
     end
 
-    assert_equal 10000, @counter.count
+    assert_equal 10_000, @counter.count
   end
 end
